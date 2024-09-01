@@ -2,18 +2,18 @@
 
 namespace GlosGuru.Model;
 
-public class GlosContext : DbContext
+public class GlosDbContext : DbContext
 {
     public DbSet<WordList> WordLists { get; set; }
     public DbSet<Word> Words { get; set; }
 
     public string DbPath { get; }
 
-    public GlosContext()
+    public GlosDbContext()
     {
         var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder);
-        DbPath = System.IO.Path.Join(path, "glosguru.db");
+        DbPath = Path.Join(path, "glosguru.db");
     }
 
     // The following configures EF to create a Sqlite database file in the

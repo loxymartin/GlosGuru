@@ -1,19 +1,37 @@
 ﻿@page "/counter"
 @rendermode InteractiveServer
 
+@inject GlosDbContext DbContext
+
+
+
 <PageTitle>Counter</PageTitle>
 
 <h1>Counter</h1>
 
 <p role="status">Current count: @currentCount</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@* <button class="btn btn-primary" @onclick="IncrementCount">Click me</button> *@
+
+<input type="text" @bind="@inputValue" />
+<button class="btn btn-primary" @onclick="Submit">Submit</button>
 
 @code {
     private int currentCount = 0;
+    private string inputValue = "";
 
     private void IncrementCount()
     {
         currentCount++;
+    }
+
+    private async void Submit()
+    {
+        if(!string.IsNullOrEmpty(inputValue))
+        {
+            DbContext.WordLists.Add(new WordList { Name = inputValue });
+            await DbContext.SaveChangesAsync();
+        }
     }
 }

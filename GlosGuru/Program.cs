@@ -1,4 +1,5 @@
 using GlosGuru.Components;
+using GlosGuru.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,9 @@ builder.AddServiceDefaults();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddDbContext<GlosDbContext>();
+builder.Services.AddQuickGridEntityFrameworkAdapter();
 
 var app = builder.Build();
 
