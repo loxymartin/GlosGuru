@@ -27,7 +27,7 @@ jobs:
     #- name: Test
     #  run: dotnet test --no-build --verbosity normal
     - name: Build Docker image
-      run: docker build . -t ghcr.io/loxymartin/GlosGuru/glosguru:latest
+      run: docker build . -t ghcr.io/loxymartin/glosguru/glosguru:latest
 
     - name: Log in to GitHub Packages
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -36,4 +36,4 @@ jobs:
     #  run: docker tag myapp:latest ghcr.io/loxymartin/GlosGuru/glosguru:latest
 
     - name: Push Docker image to GitHub Packages
-      run: docker push ghcr.io/loxymartin/GlosGuru/glosguru:latest
+      run: docker push ghcr.io/loxymartin/glosguru/glosguru:latest
