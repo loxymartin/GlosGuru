@@ -68,7 +68,7 @@ jobs:
         push: true
         tags: |
           "ghcr.io/loxymartin/glosguru/glosguru:latest"
-          "ghcr.io/loxymartin/glosguru/glosguru:${{ github.run_number }}
+          "ghcr.io/loxymartin/glosguru/glosguru:${{ github.run_number }}"
           
         #"${{ github.repository }}:latest"
         #"${{ github.repository }}:${{ github.ref_name }}"
