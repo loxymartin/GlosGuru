@@ -9,7 +9,7 @@ EXPOSE 8081
 
 
 # This stage is used to build the service project
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["GlosGuru/GlosGuru.csproj", "GlosGuru/"]
@@ -20,7 +20,7 @@ WORKDIR "/src/GlosGuru"
 RUN dotnet build "./GlosGuru.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
-FROM --platform=$BUILDPLATFORM build AS publish
+FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./GlosGuru.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
