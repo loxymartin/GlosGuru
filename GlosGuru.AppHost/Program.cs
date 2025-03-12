@@ -1,7 +1,16 @@
+using Projects;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddProject<Projects.GlosGuru_Web>("glosguru");
+var postgres = builder.AddPostgres("postgres")
+                        .WithPgAdmin();
+                        
+var postgresdb = postgres.AddDatabase("postgresdb");
 
-builder.AddProject<Projects.GlosGuru_Api>("glosguru-api");
+var apiProj = builder.AddProject<GlosGuru_Api>("glosguru-api")
+                                    .WithReference(postgresdb);;
+
+builder.AddProject<GlosGuru_Web>("glosguru-web")
+                                    .WithReference(apiProj);
 
 builder.Build().Run();
