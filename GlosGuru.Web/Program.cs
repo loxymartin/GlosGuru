@@ -1,5 +1,5 @@
-using GlosGuru.Components;
-using GlosGuru.Model;
+using GlosGuru.Web.Components;
+using GlosGuru.Web.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 

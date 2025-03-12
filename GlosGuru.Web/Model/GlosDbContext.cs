@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace GlosGuru.Model;
+namespace GlosGuru.Web.Model;
 
 public class GlosDbContext : DbContext
 {

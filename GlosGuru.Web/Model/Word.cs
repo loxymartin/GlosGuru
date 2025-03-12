@@ -1,4 +1,4 @@
-﻿namespace GlosGuru.Model;
+﻿namespace GlosGuru.Web.Model;
 
 public class Word
 {

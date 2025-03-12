@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace GlosGuru.Migrations
+namespace GlosGuru.Web.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
