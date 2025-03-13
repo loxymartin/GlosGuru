@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "dotnet",
+			"task": "watch GlosGuru.AppHost",
+			"file": "/Users/martin/code/Glosguru/GlosGuru.AppHost/GlosGuru.AppHost.csproj",
+			"problemMatcher": [],
+			"label": "dotnet: watch GlosGuru.AppHost"
+		}
+	]
+}
