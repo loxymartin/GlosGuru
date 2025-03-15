@@ -9,9 +9,6 @@ builder.AddServiceDefaults();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddDbContext<GlosDbContext>();
-builder.Services.AddQuickGridEntityFrameworkAdapter();
-
 var app = builder.Build();
 
 app.MapDefaultEndpoints();

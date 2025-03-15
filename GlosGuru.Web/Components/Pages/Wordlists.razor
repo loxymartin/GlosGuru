@@ -1,16 +1,14 @@
 ﻿@page "/wordlists"
 
 @using Microsoft.AspNetCore.Components.QuickGrid
-@using Microsoft.EntityFrameworkCore
 
-@inject GlosDbContext DbContext
 
 <h3 class="fetknopp">Wordlists</h3>
 
-<QuickGrid class="grid" Items="@DbContext.WordLists">
+@* <QuickGrid class="grid" Items="@DbContext.WordLists">
     <PropertyColumn Property="@(p => p.Id)" Sortable="true" />
     <PropertyColumn Property="@(p => p.Name)" Sortable="true" />
-</QuickGrid>
+</QuickGrid> *@
 
 @code {
     // private IQueryable<WordList> wordLists;

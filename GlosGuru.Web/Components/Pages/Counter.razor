@@ -1,9 +1,6 @@
 ﻿@page "/counter"
 @rendermode InteractiveServer
 
-@inject GlosDbContext DbContext
-
-
 
 <PageTitle>Counter</PageTitle>
 
@@ -26,12 +23,12 @@
         currentCount++;
     }
 
-    private async void Submit()
+    private void Submit()
     {
         if(!string.IsNullOrEmpty(inputValue))
         {
-            DbContext.WordLists.Add(new WordList { Name = inputValue });
-            await DbContext.SaveChangesAsync();
+            @* DbContext.WordLists.Add(new WordList { Name = inputValue });
+            await DbContext.SaveChangesAsync(); *@
         }
     }
 }

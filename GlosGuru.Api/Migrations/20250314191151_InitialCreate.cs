@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace GlosGuru.Web.Migrations
+namespace GlosGuru.Api.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -14,9 +15,9 @@ namespace GlosGuru.Web.Migrations
                 name: "WordLists",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,11 +28,11 @@ namespace GlosGuru.Web.Migrations
                 name: "Words",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Lang1 = table.Column<string>(type: "TEXT", nullable: false),
-                    Lang2 = table.Column<string>(type: "TEXT", nullable: false),
-                    WordListId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Lang1 = table.Column<string>(type: "text", nullable: false),
+                    Lang2 = table.Column<string>(type: "text", nullable: false),
+                    WordListId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

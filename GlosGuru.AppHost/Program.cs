@@ -3,12 +3,13 @@ using Projects;
 var builder = DistributedApplication.CreateBuilder(args);
 
 var postgres = builder.AddPostgres("postgres")
+                        .WithDataVolume(isReadOnly: false)
                         .WithPgAdmin();
                         
-var postgresdb = postgres.AddDatabase("postgresdb");
+var glosgurudb = postgres.AddDatabase("GlosGuruDb");
 
 var apiProj = builder.AddProject<GlosGuru_Api>("glosguru-api")
-                                    .WithReference(postgresdb);;
+                                    .WithReference(glosgurudb);;
 
 builder.AddProject<GlosGuru_Web>("glosguru-web")
                                     .WithReference(apiProj);
