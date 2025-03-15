@@ -1,0 +1,1 @@
+Generated functions should not have the Async suffix.
