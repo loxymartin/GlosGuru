@@ -26,7 +26,7 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-        
+
     #- name: "Set up QEMU"
     #  uses: "docker/setup-qemu-action@v3"
 
@@ -55,19 +55,19 @@ jobs:
       with:
         registry: https://ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}    
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: "Build and push image tags"
       uses: "docker/build-push-action@v6"
       with:
-        file: "./GlosGuru/Dockerfile"
+        file: "./GlosGuru.Web/Dockerfile"
         context: "."
         platforms: "linux/arm64"
         sbom: true
         push: true
         tags: |
-          "ghcr.io/loxymartin/glosguru/glosguru:latest"
-          "ghcr.io/loxymartin/glosguru/glosguru:${{ github.run_number }}"
-          
+          "ghcr.io/loxymartin/glosguru/glosguru-web:latest"
+          "ghcr.io/loxymartin/glosguru/glosguru-web:${{ github.run_number }}"
+
         #"${{ github.repository }}:latest"
         #"${{ github.repository }}:${{ github.ref_name }}"
