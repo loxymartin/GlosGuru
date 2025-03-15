@@ -25,7 +25,8 @@ RUN dotnet build "./GlosGuru.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build -
 FROM --platform=$BUILDPLATFORM build AS publish
 ARG BUILD_CONFIGURATION=Release
 ARG TARGETARCH
-RUN dotnet publish "./GlosGuru.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --arch $TARGETARCH
+ARG VERSION
+RUN dotnet publish "./GlosGuru.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --arch $TARGETARCH -p:AssemblyVersion=$VERSION
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
