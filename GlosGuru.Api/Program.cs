@@ -1,8 +1,15 @@
 using GlosGuru.Api.Model;
+using GlosGuru.Api.Repositories;
+using GlosGuru.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
+
+// Update the connection string to use a dynamic port resolution
+// var postgresPort = Environment.GetEnvironmentVariable("POSTGRES_PORT") ?? "5432";
+// var connectionString = $"Host=localhost;Port={postgresPort};Database=GlosGuru;Username=yourusername;Password=yourpassword";
+// builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -10,9 +17,13 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// Configure DbContext with PostgreSQL
 builder.Services.AddDbContext<GlosGuruContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("GlosGuruDb")
-        ?? throw new InvalidOperationException("Connection string 'postgresdb' not found.")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register repositories and services
+builder.Services.AddScoped<IWordListRepository, WordListRepository>();
+builder.Services.AddScoped<IWordListService, WordListService>();
 
 var app = builder.Build();
 app.MapDefaultEndpoints();

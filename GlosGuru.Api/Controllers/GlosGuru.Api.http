@@ -1,0 +1,32 @@
+#@GlosGuru.Api_HostAddress = http://localhost:5131
+
+### WordListController CRUD Operations ###
+
+# Get all WordLists
+GET https://localhost:7224/api/WordList
+
+# Get a WordList by ID
+GET https://localhost:5001/api/WordList/1
+
+# Create a new WordList
+POST https://localhost:5001/api/WordList
+Content-Type: application/json
+
+{
+  "name": "Sample WordList",
+  "description": "A sample description for the WordList."
+}
+
+# Update an existing WordList
+PUT https://localhost:5001/api/WordList/1
+Content-Type: application/json
+
+{
+  "name": "Updated WordList",
+  "description": "An updated description for the WordList."
+}
+
+# Delete a WordList
+DELETE https://localhost:5001/api/WordList/1
+
+###
