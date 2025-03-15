@@ -19,7 +19,7 @@ COPY ["GlosGuru.Web/GlosGuru.Web.csproj", "GlosGuru.Web/"]
 RUN dotnet restore "./GlosGuru.Web/GlosGuru.Web.csproj" --arch $TARGETARCH
 COPY . .
 WORKDIR "/src/GlosGuru.Web"
-RUN dotnet build "./GlosGuru.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build --arch $TARGETARCH -p:Version=$VERSION
+RUN dotnet build "./GlosGuru.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build --arch $TARGETARCH -p:AssemblyVersion=$VERSION
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM --platform=$BUILDPLATFORM build AS publish

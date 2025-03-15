@@ -58,7 +58,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Set version variable
-      run: echo "VERSION=1.0.${{ github.run_number }}" >> $GITHUB_ENV
+      run: echo "VERSION=1.0.0.${{ github.run_number }}" >> $GITHUB_ENV
 
     - name: "Build and push image tags"
       uses: "docker/build-push-action@v6"
