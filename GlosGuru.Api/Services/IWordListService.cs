@@ -1,6 +1,6 @@
-using GlosGuru.Api.DTOs;
-
 namespace GlosGuru.Api.Services;
+
+using GlosGuru.Api.DTOs;
 
 public interface IWordListService
 {

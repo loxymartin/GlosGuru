@@ -1,12 +1,12 @@
+namespace GlosGuru.Api.Controllers;
+
 using GlosGuru.Api.DTOs;
 using GlosGuru.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GlosGuru.Api.Controllers;
-
 [ApiController]
 [Route("api/[controller]")]
-public class WordListController(IWordListService wordListService) : ControllerBase
+public class WordListsController(IWordListService wordListService) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<WordListDto>>> GetAll()
@@ -19,10 +19,12 @@ public class WordListController(IWordListService wordListService) : ControllerBa
     public async Task<ActionResult<WordListDto>> GetById(int id)
     {
         var wordList = await wordListService.GetById(id);
-        
+
         if (wordList == null)
+        {
             return NotFound($"WordList with ID {id} not found");
-            
+        }
+
         return Ok(wordList);
     }
 
@@ -37,10 +39,12 @@ public class WordListController(IWordListService wordListService) : ControllerBa
     public async Task<ActionResult<WordListDto>> Update(int id, WordListDto wordListDto)
     {
         var updatedWordList = await wordListService.Update(id, wordListDto);
-        
+
         if (updatedWordList == null)
+        {
             return NotFound($"WordList with ID {id} not found");
-            
+        }
+
         return Ok(updatedWordList);
     }
 
@@ -48,10 +52,12 @@ public class WordListController(IWordListService wordListService) : ControllerBa
     public async Task<ActionResult> Delete(int id)
     {
         var result = await wordListService.Delete(id);
-        
+
         if (!result)
+        {
             return NotFound($"WordList with ID {id} not found");
-            
+        }
+
         return NoContent();
     }
 }

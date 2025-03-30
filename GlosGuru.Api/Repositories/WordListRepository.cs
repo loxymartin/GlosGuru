@@ -1,23 +1,17 @@
+namespace GlosGuru.Api.Repositories;
+
 using GlosGuru.Api.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace GlosGuru.Api.Repositories;
-
 public class WordListRepository(GlosGuruContext context) : IWordListRepository
 {
-    public async Task<IEnumerable<WordList>> GetAll()
-    {
-        return await context.WordLists
+    public async Task<IEnumerable<WordList>> GetAll() => await context.WordLists
             .Include(wl => wl.Words)
             .ToListAsync();
-    }
 
-    public async Task<WordList?> GetById(int id)
-    {
-        return await context.WordLists
+    public async Task<WordList?> GetById(int id) => await context.WordLists
             .Include(wl => wl.Words)
             .FirstOrDefaultAsync(wl => wl.Id == id);
-    }
 
     public async Task<WordList> Create(WordList wordList)
     {
@@ -30,7 +24,9 @@ public class WordListRepository(GlosGuruContext context) : IWordListRepository
     {
         var existingWordList = await context.WordLists.FindAsync(wordList.Id);
         if (existingWordList == null)
+        {
             return null;
+        }
 
         context.Entry(existingWordList).CurrentValues.SetValues(wordList);
         await context.SaveChangesAsync();
@@ -41,7 +37,9 @@ public class WordListRepository(GlosGuruContext context) : IWordListRepository
     {
         var wordList = await context.WordLists.FindAsync(id);
         if (wordList == null)
+        {
             return false;
+        }
 
         context.WordLists.Remove(wordList);
         await context.SaveChangesAsync();
