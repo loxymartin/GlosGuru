@@ -1,5 +1,4 @@
 using GlosGuru.Web.Components;
-using GlosGuru.Web.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +7,9 @@ builder.AddServiceDefaults();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddHttpClient("glosguru-api", (_, client) =>
+    client.BaseAddress = new Uri("https://glosguru-api"));
 
 var app = builder.Build();
 

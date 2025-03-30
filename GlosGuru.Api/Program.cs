@@ -19,7 +19,7 @@ builder.Services.AddOpenApi();
 
 // Configure DbContext with PostgreSQL
 builder.Services.AddDbContext<GlosGuruContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("GlosGuruDb")));
 
 // Register repositories and services
 builder.Services.AddScoped<IWordListRepository, WordListRepository>();

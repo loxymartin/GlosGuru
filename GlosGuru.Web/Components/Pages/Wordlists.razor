@@ -1,20 +1,36 @@
 ﻿@page "/wordlists"
 
 @using Microsoft.AspNetCore.Components.QuickGrid
+@using System.Diagnostics
+
+@inject IHttpClientFactory HttpClientFactory
 
 
 <h3 class="fetknopp">Wordlists</h3>
 
-@* <QuickGrid class="grid" Items="@DbContext.WordLists">
-    <PropertyColumn Property="@(p => p.Id)" Sortable="true" />
-    <PropertyColumn Property="@(p => p.Name)" Sortable="true" />
-</QuickGrid> *@
+@if (wordLists == null )
+{
+    <p><em>Loading...</em></p>
+}
+else if (wordLists.Count == 0)
+{
+    <p><em>No wordlists found.</em></p>
+}
+else
+{
+    <QuickGrid Items="@wordLists.AsQueryable()">
+        <PropertyColumn Property="@(p => p.Id)" Sortable="true" />
+        <PropertyColumn Property="@(p => p.Name)" Sortable="true" />
+    </QuickGrid>
+}
 
 @code {
-    // private IQueryable<WordList> wordLists;
+    private HttpClient glosguruApi = null!;
+    private List<WordList> wordLists = new();
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     wordLists = DbContext.WordLists;
-    // }
+    protected override void OnInitialized()
+    {
+        glosguruApi = HttpClientFactory.CreateClient("glosguru-api");
+        wordLists = glosguruApi.GetFromJsonAsync<List<WordList>>("api/WordLists").Result!;
+    }
 }
