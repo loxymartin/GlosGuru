@@ -1,26 +1,37 @@
 ﻿@page "/wordlists"
+@rendermode InteractiveServer
 
-@using Microsoft.AspNetCore.Components.QuickGrid
+
 @using System.Diagnostics
+@using GlosGuru.Web.Model
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.QuickGrid
 
 @inject IHttpClientFactory HttpClientFactory
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
 
 
-<h3 class="fetknopp">Wordlists</h3>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fetknopp">Wordlists</h3>
+    <button class="btn btn-primary" @onclick="CreateNewWordList">Create New Word List</button>
+</div>
 
 @if (wordLists == null )
 {
     <p><em>Loading...</em></p>
 }
-else if (wordLists.Count == 0)
-{
-    <p><em>No wordlists found.</em></p>
-}
 else
 {
     <QuickGrid Items="@wordLists.AsQueryable()">
-        <PropertyColumn Property="@(p => p.Id)" Sortable="true" />
-        <PropertyColumn Property="@(p => p.Name)" Sortable="true" />
+        <PropertyColumn Property="@(p => p.Id)" Title="Id" Sortable="true" />
+        <PropertyColumn Property="@(p => p.Name)" Title="Name" Sortable="true" />
+        <TemplateColumn Title="Actions" Context="context">
+            <button class="btn btn-sm btn-primary" @onclick="() => EditWordList(context)">Edit</button>
+            <button class="btn btn-sm btn-danger" @onclick="() => DeleteWordList(context)">Delete</button>
+        </TemplateColumn>
     </QuickGrid>
 }
 
@@ -28,9 +39,64 @@ else
     private HttpClient glosguruApi = null!;
     private List<WordList> wordLists = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         glosguruApi = HttpClientFactory.CreateClient("glosguru-api");
-        wordLists = glosguruApi.GetFromJsonAsync<List<WordList>>("api/WordLists").Result!;
+        await LoadWordLists();
+    }
+
+    private async Task LoadWordLists()
+    {
+        try
+        {
+            var result = await glosguruApi.GetFromJsonAsync<List<WordList>>("api/WordLists");
+            if (result != null)
+            {
+                wordLists = result;
+            }
+        }
+        catch (Exception)
+        {
+            // Handle error - could show a notification
+        }
+    }
+
+    private void CreateNewWordList()
+    {
+        NavigationManager.NavigateTo("/wordlists/new");
+    }
+
+    private void EditWordList(WordList wordList)
+    {
+        NavigationManager.NavigateTo($"/wordlists/edit/{wordList.Id}");
+    }
+
+    private async Task DeleteWordList(WordList wordList)
+    {
+        var id = wordList.Id;
+
+        // Show confirmation dialog
+        bool confirmed = await this.JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this word list?");
+
+        if (confirmed)
+        {
+            try
+            {
+                var response = await glosguruApi.DeleteAsync($"api/WordLists/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    await LoadWordLists();
+                }
+                else
+                {
+                    // Handle error - could show a notification
+                }
+            }
+            catch (Exception)
+            {
+                // Handle exception - could show a notification
+            }
+        }
     }
 }

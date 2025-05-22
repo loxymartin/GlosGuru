@@ -1,0 +1,137 @@
+@page "/wordlists/new"
+@page "/wordlists/edit/{Id:int}"
+
+@using GlosGuru.Web.Model
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components.Forms
+
+@inject IHttpClientFactory HttpClientFactory
+@inject NavigationManager NavigationManager
+
+<h3>@(Id == null ? "Create New Word List" : "Edit Word List")</h3>
+
+<EditForm Model="@wordList" OnValidSubmit="SaveWordList" FormName="wordListForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <InputText id="name" @bind-Value="wordList.Name" class="form-control" />
+    </div>
+
+    <h4>Words</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Swedish</th>
+                <th>English</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var word in wordList.Words)
+            {
+                <tr>
+                    <td>
+                        <InputText @bind-Value="word.Lang1" class="form-control" />
+                    </td>
+                    <td>
+                        <InputText @bind-Value="word.Lang2" class="form-control" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" @onclick="() => RemoveWord(word)">
+                            Remove
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-secondary mb-3" @onclick="AddWord">
+        Add Word
+    </button>
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary" @onclick="GoBack">Cancel</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    private WordList wordList = new(); // WordList { Words = new List<Word>() };
+    private HttpClient glosguruApi = null!;
+
+    protected override void OnInitialized()
+    {
+        glosguruApi = HttpClientFactory.CreateClient("glosguru-api");
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id.HasValue)
+        {
+            try
+            {
+                var result = await glosguruApi.GetFromJsonAsync<WordList>($"api/WordLists/{Id}");
+                if (result != null)
+                {
+                    wordList = result;
+                }
+            }
+            catch (Exception)
+            {
+                // Handle error - could show a notification
+                NavigationManager.NavigateTo("/wordlists");
+            }
+        }
+    }
+
+    private void AddWord()
+    {
+        wordList.Words.Add(new Word { Lang1 = "", Lang2 = "" });
+    }
+
+    private void RemoveWord(Word word)
+    {
+        wordList.Words.Remove(word);
+    }
+
+    private async Task SaveWordList()
+    {
+        try
+        {
+            HttpResponseMessage response;
+
+            if (Id.HasValue)
+            {
+                response = await glosguruApi.PutAsJsonAsync($"api/WordLists/{Id}", wordList);
+            }
+            else
+            {
+                response = await glosguruApi.PostAsJsonAsync("api/WordLists", wordList);
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                NavigationManager.NavigateTo("/wordlists");
+            }
+            else
+            {
+                // Handle error - could show a notification
+            }
+        }
+        catch (Exception)
+        {
+            // Handle exception - could show a notification
+        }
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/wordlists");
+    }
+}
