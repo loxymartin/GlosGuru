@@ -39,10 +39,10 @@ app.UseAuthorization();
 app.MapControllers();
 
 //Create database and apply migrations
-// using (var scope = app.Services.CreateScope())
-// {
-//     var dbContext = scope.ServiceProvider.GetRequiredService<GlosGuruContext>();
-//     dbContext.Database.Migrate();
-// }
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<GlosGuruContext>();
+    dbContext.Database.Migrate();
+}
 
 app.Run();
