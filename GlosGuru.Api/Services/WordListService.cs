@@ -28,6 +28,14 @@ public class WordListService(IWordListRepository repository) : IWordListService
     public async Task<WordListDto?> Update(int id, WordListDto wordListDto)
     {
         wordListDto.Id = id;
+        // Ensure all Words have the correct WordListId
+        if (wordListDto.Words != null)
+        {
+            foreach (var word in wordListDto.Words)
+            {
+                word.WordListId = id;
+            }
+        }
         var wordList = MapToEntity(wordListDto);
         var updatedWordList = await repository.Update(wordList);
         return updatedWordList == null ? null : MapToDto(updatedWordList);

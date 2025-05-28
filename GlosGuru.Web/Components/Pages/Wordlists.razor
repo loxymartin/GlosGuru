@@ -1,9 +1,8 @@
-﻿@page "/wordlists"
+@page "/wordlists"
 @rendermode InteractiveServer
 
 
 @using System.Diagnostics
-@using GlosGuru.Web.Model
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Forms
@@ -37,7 +36,7 @@ else
 
 @code {
     private HttpClient glosguruApi = null!;
-    private List<WordList> wordLists = new();
+    private List<WordListDto> wordLists = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -49,7 +48,7 @@ else
     {
         try
         {
-            var result = await glosguruApi.GetFromJsonAsync<List<WordList>>("api/WordLists");
+            var result = await glosguruApi.GetFromJsonAsync<List<WordListDto>>("api/WordLists");
             if (result != null)
             {
                 wordLists = result;
@@ -66,12 +65,12 @@ else
         NavigationManager.NavigateTo("/wordlists/new");
     }
 
-    private void EditWordList(WordList wordList)
+    private void EditWordList(WordListDto wordList)
     {
         NavigationManager.NavigateTo($"/wordlists/edit/{wordList.Id}");
     }
 
-    private async Task DeleteWordList(WordList wordList)
+    private async Task DeleteWordList(WordListDto wordList)
     {
         var id = wordList.Id;
 

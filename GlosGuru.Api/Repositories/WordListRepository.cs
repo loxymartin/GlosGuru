@@ -22,15 +22,47 @@ public class WordListRepository(GlosGuruContext context) : IWordListRepository
 
     public async Task<WordList?> Update(WordList wordList)
     {
-        var existingWordList = await context.WordLists.FindAsync(wordList.Id);
-        if (existingWordList == null)
-        {
+        var existing = await context.WordLists
+            .Include(wl => wl.Words)
+            .FirstOrDefaultAsync(wl => wl.Id == wordList.Id);
+
+        if (existing == null)
             return null;
+
+        existing.Name = wordList.Name;
+
+        // Update Words: Remove deleted, update existing, add new
+        // Remove words not in the updated list
+        var updatedWordIds = wordList.Words.Select(w => w.Id).ToHashSet();
+        var wordsToRemove = existing.Words.Where(w => !updatedWordIds.Contains(w.Id)).ToList();
+        foreach (var word in wordsToRemove)
+        {
+            context.Words.Remove(word);
         }
 
-        context.Entry(existingWordList).CurrentValues.SetValues(wordList);
+        // Update or add words
+        foreach (var word in wordList.Words)
+        {
+            var existingWord = existing.Words.FirstOrDefault(w => w.Id == word.Id && word.Id != 0);
+            if (existingWord != null)
+            {
+                existingWord.Lang1 = word.Lang1;
+                existingWord.Lang2 = word.Lang2;
+            }
+            else
+            {
+                // New word
+                existing.Words.Add(new Word
+                {
+                    Lang1 = word.Lang1,
+                    Lang2 = word.Lang2,
+                    WordListId = existing.Id
+                });
+            }
+        }
+
         await context.SaveChangesAsync();
-        return existingWordList;
+        return existing;
     }
 
     public async Task<bool> Delete(int id)

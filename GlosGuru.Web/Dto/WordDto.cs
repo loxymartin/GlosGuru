@@ -1,10 +1,9 @@
-﻿namespace GlosGuru.Web.Model;
+namespace GlosGuru.Web.Dto;
 
-public class Word
+public class WordDto
 {
     public int Id { get; set; }
     public string Lang1 { get; set; } = string.Empty;
     public string Lang2 { get; set; } = string.Empty;
-
     public int WordListId { get; set; }
 }

@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 .DS_Store
+GlosGuru.Api/appsettings.Development.json
